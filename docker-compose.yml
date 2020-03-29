@@ -8,26 +8,27 @@ services:
       - WS_HOST=0.0.0.0
       - WS_BEHIND_PROXY=yes
       - TURN_MODE=hmac
-      - TURN_SERVER=turn:localhost
+      - TURN_SERVER=turn:${HOST}
       - TURN_USERNAME=filedrop
-      - TURN_SECRET=abcd
+      - TURN_SECRET=${TURN_SECRET}
 
   web:
     build:
       context: ./filedrop-web
       dockerfile: Dockerfile
       args:
-        - TITLE=filedrop
-        - SERVER=ws://localhost/ws/
+        - REACT_APP_TITLE=${TITLE}
+        - REACT_APP_SERVER=ws://${HOST}:${PORT}/ws/
+        - REACT_APP_USE_BROWSER_ROUTER=1
 
   coturn:
     image: instrumentisto/coturn
-    command: --use-auth-secret --static-auth-secret=abcd --no-tls --no-dtls
+    command: --use-auth-secret --static-auth-secret=${TURN_SECRET} --no-tls --no-dtls
 
   nginx:
     image: nginx:alpine
     ports:
-      - "80:80"
+      - "${PORT}:80"
     volumes:
       - ./conf/nginx:/etc/nginx
     command: /bin/sh -c "nginx -g \"daemon off;\""

@@ -8,11 +8,16 @@ Clone the repo and run the following commands:
 
 ```
 git submodule update --recursive --init
-docker-compose up
+HOST=localhost PORT=80 TITLE=filedrop TURN_SECRET=CHANGE_ME docker-compose up
 ```
 
 Make sure docker and docker-compose are installed and your user is in the docker group. In case another reverse proxy is used make sure to change the default port (from 80) and to add the `X-Forwarded-For` header with client's IP address.
 
-## Using custom ports
+## Environment variables
 
-Please copy the attached `docker-compose.override.example.yml` file to `docker-compose.override.yml` and modify the values as needed.
+| Variable      | Default value | Description                                         |
+| ------------- | ------------- | --------------------------------------------------- |
+| `HOST`        | `localhost`   | Domain/external IP for the application.             |
+| `PORT`        | `80`          | Reverse proxy port.                                 |
+| `TITLE`       | `filedrop`    | Application title.                                  |
+| `TURN_SECRET` | null          | TURN secret. Should be set to a random, long value. |
