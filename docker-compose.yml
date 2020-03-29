@@ -24,6 +24,7 @@ services:
   coturn:
     image: instrumentisto/coturn
     command: --use-auth-secret --static-auth-secret=${TURN_SECRET} --no-tls --no-dtls
+    network_mode: host
 
   nginx:
     image: nginx:alpine
