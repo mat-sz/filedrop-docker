@@ -1,0 +1,18 @@
+version: "3"
+services:
+  ws:
+    build:
+      context: ./filedrop-ws
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+
+  web:
+    build:
+      context: ./filedrop-web
+      dockerfile: Dockerfile
+      args:
+        - TITLE=filedrop
+        - SERVER=ws://localhost:5000/ws
+    ports:
+      - "80:80"
