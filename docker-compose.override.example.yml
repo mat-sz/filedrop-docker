@@ -1,12 +1,5 @@
 version: "3"
 services:
-  ws:
-    ports:
-      - "5000:5000"
-
-  web:
-    build:
-      args:
-        - SERVER=ws://localhost:5000/ws
+  nginx:
     ports:
       - "80:80"

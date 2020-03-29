@@ -6,12 +6,11 @@ services:
       dockerfile: Dockerfile
     environment:
       - WS_HOST=0.0.0.0
+      - WS_BEHIND_PROXY=yes
       - TURN_MODE=hmac
       - TURN_SERVER=turn:localhost
       - TURN_USERNAME=filedrop
       - TURN_SECRET=abcd
-    ports:
-      - "5000:5000"
 
   web:
     build:
@@ -19,10 +18,16 @@ services:
       dockerfile: Dockerfile
       args:
         - TITLE=filedrop
-        - SERVER=ws://localhost:5000/ws
-    ports:
-      - "80:80"
+        - SERVER=ws://localhost/ws/
 
   coturn:
     image: instrumentisto/coturn
     command: --use-auth-secret --static-auth-secret=abcd --no-tls --no-dtls
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./conf/nginx:/etc/nginx
+    command: /bin/sh -c "nginx -g \"daemon off;\""
