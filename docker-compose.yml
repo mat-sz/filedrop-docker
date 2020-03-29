@@ -4,6 +4,12 @@ services:
     build:
       context: ./filedrop-ws
       dockerfile: Dockerfile
+    environment:
+      - WS_HOST=0.0.0.0
+      - TURN_MODE=hmac
+      - TURN_SERVER=turn:localhost
+      - TURN_USERNAME=filedrop
+      - TURN_SECRET=abcd
     ports:
       - "5000:5000"
 
@@ -16,3 +22,7 @@ services:
         - SERVER=ws://localhost:5000/ws
     ports:
       - "80:80"
+
+  coturn:
+    image: instrumentisto/coturn
+    command: --use-auth-secret --static-auth-secret=abcd --no-tls --no-dtls

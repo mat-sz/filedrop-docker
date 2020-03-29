@@ -1,6 +1,6 @@
 # filedrop-docker
 
-A docker-compose setup for filedrop. Contains: [filedrop-web](https://github.com/mat-sz/filedrop-web) and [filedrop-ws](https://github.com/mat-sz/filedrop-ws). This configuration should roughly match the production environment.
+A docker-compose setup for filedrop. Contains: [filedrop-web](https://github.com/mat-sz/filedrop-web), [filedrop-ws](https://github.com/mat-sz/filedrop-ws), [coturn](https://github.com/coturn/coturn) and [nginx](http://nginx.org/). This configuration should roughly match the production environment.
 
 ## Installation
 
