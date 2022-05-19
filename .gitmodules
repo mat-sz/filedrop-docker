@@ -1,8 +1,8 @@
 [submodule "filedrop-web"]
 	path = filedrop-web
-	url = git@github.com:mat-sz/filedrop-web.git
+	url = https://github.com/mat-sz/filedrop-web.git
 	branch = master
 [submodule "filedrop-ws"]
 	path = filedrop-ws
-	url = git@github.com:mat-sz/filedrop-ws.git
+	url = https://github.com/mat-sz/filedrop-ws.git
 	branch = master

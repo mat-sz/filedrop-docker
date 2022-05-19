@@ -7,8 +7,8 @@ A docker-compose setup for filedrop. Contains: [filedrop-web](https://github.com
 Clone the repo and run the following commands:
 
 ```
-git submodule update --recursive --init
-HOST=localhost PORT=80 TITLE=filedrop TURN_SECRET=CHANGE_ME docker-compose up
+git submodule update --remote --recursive --init
+HOST=localhost PORT=80 TITLE=filedrop TURN_SECRET=CHANGE_ME docker-compose up --build --force-recreate
 ```
 
 Make sure docker and docker-compose are installed and your user is in the docker group. In case another reverse proxy is used make sure to change the default port (from 80) and to add the `X-Forwarded-For` header with client's IP address.
