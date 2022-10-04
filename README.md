@@ -21,3 +21,55 @@ Make sure docker and docker-compose are installed and your user is in the docker
 | `PORT`        | `80`          | Reverse proxy port.                                 |
 | `TITLE`       | `filedrop`    | Application title.                                  |
 | `TURN_SECRET` | null          | TURN secret. Should be set to a random, long value. |
+
+## HTTPS setup
+
+### Setup with a reverse proxy before nginx (easy)
+
+Configure your reverse proxy to proxy requests to the specified `PORT` and then follow your usual instructions for using SSL certificates with said proxy.
+
+#### Nginx example
+
+```nginx
+http {
+  upstream filedrop {
+    server 127.0.0.1:5000; # 5000 = PORT
+  }
+
+  # ...
+
+  map $http_upgrade $connection_upgrade {
+    default upgrade;
+    '' close;
+  }
+
+  server {
+    listen 80 default_server;
+    # server_name might also be configured here.
+
+    # ...
+
+    location / {
+      proxy_pass http://filedrop;
+      proxy_http_version 1.1;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $host;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection $connection_upgrade;
+    }
+  }
+}
+```
+
+### Setup without another reverse proxy (difficult)
+
+There are two things that need to be adjusted for HTTPS support.
+
+1. Certificates must be configured in `conf/nginx/nginx.conf`. There are several guides available for configuration of nginx in docker with Let's Encrypt:
+   - https://mindsers.blog/post/https-using-nginx-certbot-docker/
+   - https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71
+2. Port 443 needs to be forwarded for the nginx service.
+   1. The following needs to be added in the `services` -> `nginx` -> `ports` dictionary in the `docker-compose.yml` file:
+      - `- "${SECURE_PORT}:443"`
+   2. Then for further composes, this command must be used instead:
+      - `HOST=localhost SECURE_PORT=443 PORT=80 TITLE=filedrop TURN_SECRET=CHANGE_ME docker-compose up --build --force-recreate`
