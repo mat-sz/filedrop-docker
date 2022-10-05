@@ -26,9 +26,11 @@ Make sure docker and docker-compose are installed and your user is in the docker
 
 ### Setup with a reverse proxy before nginx (easy)
 
-Configure your reverse proxy to proxy requests to the specified `PORT` and then follow your usual instructions for using SSL certificates with said proxy.
+1. Configure your reverse proxy to proxy requests to the specified `PORT` and then follow your usual instructions for using SSL certificates with said proxy.
+2. Configure `REACT_APP_SERVER` in the `services` -> `web` -> `build` -> `args` dictionary in `docker-compose.yml` to use the `wss://` protocol instead of `ws://`, and to use the domain of the certificate you're using.
+3. Rebuild the application.
 
-#### Nginx example
+#### Nginx configuration example
 
 ```nginx
 http {
@@ -63,7 +65,7 @@ http {
 
 ### Setup without another reverse proxy (difficult)
 
-There are two things that need to be adjusted for HTTPS support.
+There are three things that need to be adjusted for HTTPS support.
 
 1. Certificates must be configured in `conf/nginx/nginx.conf`. There are several guides available for configuration of nginx in docker with Let's Encrypt:
    - https://mindsers.blog/post/https-using-nginx-certbot-docker/
@@ -73,3 +75,4 @@ There are two things that need to be adjusted for HTTPS support.
       - `- "${SECURE_PORT}:443"`
    2. Then for further composes, this command must be used instead:
       - `HOST=localhost SECURE_PORT=443 PORT=80 TITLE=filedrop TURN_SECRET=CHANGE_ME docker-compose up --build --force-recreate`
+3. Configure `REACT_APP_SERVER` in the `services` -> `web` -> `build` -> `args` dictionary in `docker-compose.yml` to use the `wss://` protocol instead of `ws://`, and to use the domain of the certificate you're using.
