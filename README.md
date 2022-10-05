@@ -38,16 +38,17 @@ http {
     server 127.0.0.1:5000; # 5000 = PORT
   }
 
-  # ...
-
   map $http_upgrade $connection_upgrade {
     default upgrade;
     '' close;
   }
 
+  # ...
+
   server {
-    listen 80 default_server;
-    # server_name might also be configured here.
+    listen 80;
+    # server_name should be configured here.
+    # HTTPS should be configured here. (certbot will handle this for you, if you're using Let's Encrypt.)
 
     # ...
 
