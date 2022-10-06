@@ -8,7 +8,7 @@ services:
       - WS_HOST=0.0.0.0
       - WS_BEHIND_PROXY=yes
       - TURN_MODE=hmac
-      - TURN_SERVER=turn:${HOST}
+      - TURN_SERVER=turn:(hostname)
       - TURN_USERNAME=filedrop
       - TURN_SECRET=${TURN_SECRET}
 
@@ -18,13 +18,15 @@ services:
       dockerfile: Dockerfile
       args:
         - REACT_APP_TITLE=${TITLE}
-        - REACT_APP_SERVER=ws://${HOST}:${PORT}/ws/
+        - REACT_APP_SERVER=(protocol)//(hostname):(port)/ws/
         - REACT_APP_USE_BROWSER_ROUTER=1
 
   coturn:
     image: instrumentisto/coturn
     command: --use-auth-secret --static-auth-secret=${TURN_SECRET} --no-tls --no-dtls
-    network_mode: host
+    ports:
+      - "3478:3478"
+      - "49152-65535:49152-65535/udp"
 
   nginx:
     image: nginx:alpine
